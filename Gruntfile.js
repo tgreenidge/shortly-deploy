@@ -1,8 +1,12 @@
-dbmodule.exports = function(grunt) {
+module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      dist: {
+        src: ['app/*/*.js', 'lib/*.js', 'public/client/*.js'],
+        dest: 'public/dist/production.js'
+      }
     },
 
     mochaTest: {
@@ -21,11 +25,16 @@ dbmodule.exports = function(grunt) {
     },
 
     uglify: {
+      build: {
+        src: 'public/dist/production.js',
+        dest: 'public/dist/production.min.js'
+      }
     },
 
     jshint: {
       files: [
         // Add filespec list here
+        'Gruntfile.js', 'test/**/*.js'
       ],
       options: {
         force: 'true',
@@ -71,6 +80,8 @@ dbmodule.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
+
+  grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'mochaTest']);
 
   grunt.registerTask('server-dev', function (target) {
     // Running nodejs in a different process and displaying output on the main console

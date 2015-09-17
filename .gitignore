@@ -21,3 +21,8 @@ node_modules/
 
 # WebStorm files
 .idea/
+
+# CSS files
+public/lib/style.css
+views/
+
