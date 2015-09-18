@@ -47,6 +47,17 @@ module.exports = function(grunt) {
     },
 
     cssmin: {
+      options: {
+        shorthandCompacting: false,
+        roundingPrecision: -1
+      },
+      target: {
+        files: [{
+          src: ['public/style.css'],
+          dest: 'public/dist/production',
+          ext: '.min.css'           
+        }]
+      }
     },
 
     watch: {
@@ -81,7 +92,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
 
-  grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'mochaTest']);
+  grunt.registerTask('default', ['build', 'nodemon', 'watch']);
 
   grunt.registerTask('server-dev', function (target) {
     // Running nodejs in a different process and displaying output on the main console
@@ -105,18 +116,19 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'jshint', 'mochaTest', 'concat', 'uglify', 'cssmin'
   ]);
 
   grunt.registerTask('upload', function(n) {
     if(grunt.option('prod')) {
-      // add your production server task here
+      ['concat', 'uglify', 'cssmin']
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
   });
 
   grunt.registerTask('deploy', [
-    // add your deploy tasks here
+    'upload'
   ]);
 
 
